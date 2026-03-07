@@ -1,271 +1,79 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="zh-Hant">
 <head>
+<meta charset="UTF-8">
+<title>漫畫頁面</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #000; /* 黑底 */
+    font-family: Arial, sans-serif;
+    color: #fff;
+  }
 
-    <meta charset="UTF-8">
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  }
 
-    <title>方方Ray</title>
+  .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: red; /* 你的頭像位置 */
+    margin-right: 15px;
+  }
 
+  .username {
+    font-size: 24px;
+    color: pink; /* 名字顏色 */
+  }
 
+  .icons {
+    display: flex;
+    gap: 15px;
+    margin: 10px 0 20px 75px; /* 和頭像對齊 */
+  }
 
-    <style>
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white; /* 圓形白色圖示 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
 
-        body
-        {
-            background-color: black;
-
-            color: white;
-
-            font-family: Arial;
-
-            margin: 40px;
-        }
-
-
-
-        .box
-        {
-            border: 3px solid white;
-
-            padding: 30px;
-
-            margin-bottom: 40px;
-        }
-
-
-
-        .top
-        {
-            display: flex;
-
-            align-items: center;
-
-            gap: 40px;
-        }
-
-
-
-        .avatar
-        {
-            width: 200px;
-
-            height: 200px;
-
-            object-fit: cover;
-        }
-
-
-
-        .name
-        {
-            font-size: 50px;
-
-            margin-bottom: 20px;
-        }
-
-
-
-        .social
-        {
-            display: flex;
-
-            gap: 20px;
-        }
-
-
-
-        .social img
-        {
-            width: 40px;
-
-            cursor: pointer;
-        }
-
-
-
-        .comic-grid
-        {
-            display: grid;
-
-            grid-template-columns: repeat(3 , 1fr);
-
-            gap: 40px;
-        }
-
-
-
-        .comic-grid img
-        {
-            width: 100%;
-
-            border: 3px solid white;
-
-            cursor: pointer;
-
-            transition: 0.3s;
-        }
-
-
-
-        .comic-grid img:hover
-        {
-            transform: scale(1.05);
-        }
-
-
-
-    </style>
-
-
-
+  .comic {
+    width: 200px;
+    height: 300px;
+    margin: 0 auto 20px auto;
+    background-color: blue; /* 漫畫封面位置 */
+    cursor: pointer;
+  }
+</style>
 </head>
-
-
-
 <body>
 
-
-
-    <div class="box">
-
-
-
-        <div class="top">
-
-
-
-            <img class="avatar" src="avatar.jpg">
-
-
-
-            <div>
-
-
-
-                <div class="name">
-
-                    浤宇的漫畫世界
-
-                </div>
-
-
-
-                <div class="social">
-
-                    <a href="https://instagram.com" target="_blank">
-
-                        <img src="ig.png">
-
-                    </a>
-
-
-
-                    <a href="https://threads.net" target="_blank">
-
-                        <img src="threads.png">
-
-                    </a>
-
-
-
-                    <a href="https://x.com" target="_blank">
-
-                        <img src="x.png">
-
-                    </a>
-
-
-
-                    <a href="https://discord.com" target="_blank">
-
-                        <img src="discord.png">
-
-                    </a>
-
-
-
-                </div>
-
-
-
-            </div>
-
-
-
-        </div>
-
-
-
-    </div>
-
-
-
-    <div class="box">
-
-
-
-        <div class="comic-grid">
-
-
-
-            <a href="comic1.html">
-
-                <img src="comic1.jpg">
-
-            </a>
-
-
-
-            <a href="comic2.html">
-
-                <img src="comic2.jpg">
-
-            </a>
-
-
-
-            <a href="comic3.html">
-
-                <img src="comic3.jpg">
-
-            </a>
-
-
-
-            <a href="comic4.html">
-
-                <img src="comic4.jpg">
-
-            </a>
-
-
-
-            <a href="comic5.html">
-
-                <img src="comic5.jpg">
-
-            </a>
-
-
-
-            <a href="comic6.html">
-
-                <img src="comic6.jpg">
-
-            </a>
-
-
-
-        </div>
-
-
-
-    </div>
-
-
+<div class="header">
+  <div class="avatar"></div>
+  <div class="username">你的名字</div>
+</div>
+
+<div class="icons">
+  <a href="#" class="icon">哀</a>
+  <a href="#" class="icon">脆</a>
+  <a href="#" class="icon">X</a>
+  <a href="#" class="icon">DC</a>
+</div>
+
+<div class="comic"></div>
 
 </body>
-
 </html>
