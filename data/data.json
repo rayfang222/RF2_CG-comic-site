@@ -4,23 +4,27 @@
     "title": "SoF37特戰隊",
     "cover": "img/01/未命名的作品.png",
     "author": "方方Ray",
+    "type": "動作 / 冒險",
+    "updateTime": "2026-03-09",
     "desc": "受到邀請的眾人，來到是非之地，他們是否能夠逃出去。",
     "chapters": [
       {
         "name": "第 01 話",
-        "images": ["https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=2", "https://picsum.photos/400/600?random=3"]
+        "images": ["https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=2"]
       },
       {
         "name": "第 02 話",
-        "images": ["https://picsum.photos/400/600?random=4", "https://picsum.photos/400/600?random=5", "https://picsum.photos/400/600?random=6"]
+        "images": ["https://picsum.photos/400/600?random=4", "https://picsum.photos/400/600?random=5"]
       }
     ]
   },
   {
     "id": "manga_02",
-    "title": "-",
+    "title": "都市影子",
     "cover": "img/cover2.jpg",
     "author": "方方Ray",
+    "type": "都市 / 正義",
+    "updateTime": "2024-05-18",
     "desc": "在繁華的都市中，隱藏著不為人知的正義使者。",
     "chapters": [
       {
