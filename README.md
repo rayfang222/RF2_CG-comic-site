@@ -1,2 +1,27 @@
-# RF2_CG-comic-site
- https://rayfang222.github.io/RF2_CG-comic-site/
+# 方方Ray專屬漫畫館 (RF2_CG-comic-site)
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Status](https://img.shields.io/badge/status-Active-brightgreen.svg)
+
+這是創作者 **方方Ray** 的個人作品展示平台，主要存放個人原創漫畫、CG 插畫以及相關創作專案。
+
+## 🌐 網站連結
+立即瀏覽：[方方Ray專屬漫畫館](https://rayfang222.github.io/RF2_CG-comic-site/)
+
+## 🎨 專案內容
+本專案包含以下核心部分：
+- **漫畫連載區**：收錄原創長短篇漫畫作品。
+- **CG 插畫集**：展示精緻的個人繪畫作品與角色設計。
+- **創作日誌**：分享創作過程中的心得與草稿。
+
+## 🛠️ 技術架構
+- **前端技術**：HTML5, CSS3, JavaScript (可根據實際使用的框架如 React/Vue 進行修改)
+- **託管平台**：GitHub Pages
+
+## ✉️ 聯絡資訊
+如果您對作品有任何建議、合作洽談或想了解更多，歡迎聯繫：
+- **作者**：Ray Fang (方方Ray)
+- **GitHub**: [rayfang222](https://github.com/rayfang222)
+
+---
+© 2024 方方Ray. 版權所有，未經授權請勿擅自轉載作品內容。
