@@ -3,7 +3,7 @@
     "id": "manga_01",
     "title": "我的冒險故事",
     "cover": "img/cover1.jpg",
-    "author": "設計師 A",
+    "author": "方方Ray",
     "desc": "這是一個發生在異世界的奇幻故事，主角展開了尋找傳說圖片的旅程。",
     "chapters": [
       {
@@ -20,11 +20,11 @@
     "id": "manga_02",
     "title": "城市獵人",
     "cover": "img/cover2.jpg",
-    "author": "設計師 B",
+    "author": "方方Ray",
     "desc": "在繁華的都市中，隱藏著不為人知的正義使者。",
     "chapters": [
       {
-        "name": "第一回",
+        "name": "第 01 話",
         "images": ["img/m2/01.jpg", "img/m2/02.jpg"]
       }
     ]
