@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>方方Ray專屬漫畫館</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root { 
             --primary-color: #ff8800; 
@@ -16,6 +18,10 @@
             --reader-bg: #0f0f0f; 
             --radius-md: 12px;
             --radius-lg: 20px;
+            --ig-color: #E1306C;
+            --threads-color: #000000;
+            --x-color: #000000;
+            --dc-color: #5865F2;
         }
 
         body { 
@@ -47,7 +53,7 @@
         header { 
             background: rgba(255, 255, 255, 0.95); 
             backdrop-filter: blur(10px);
-            padding: 15px 5%; 
+            padding: 12px 5%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
@@ -58,6 +64,8 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
+        .header-left { display: flex; align-items: center; gap: 20px; }
+
         .logo {
             cursor: pointer; 
             color: var(--primary-color); 
@@ -66,6 +74,24 @@
             transition: color 0.2s;
         }
         .logo:hover { color: var(--primary-hover); }
+
+        /* 社群連結樣式 */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .social-links a {
+            font-size: 20px;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .social-links a:hover { transform: scale(1.2); }
+        .social-links .fa-instagram:hover { color: var(--ig-color); }
+        .social-links .fa-threads:hover { color: var(--threads-color); }
+        .social-links .fa-x-twitter:hover { color: var(--x-color); }
+        .social-links .fa-discord:hover { color: var(--dc-color); }
 
         .btn-home {
             cursor: pointer; 
@@ -76,205 +102,58 @@
         }
         .btn-home:hover { color: var(--primary-color); }
 
-        /* 首頁漫畫網格 */
-        .manga-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 20px; 
-            padding: 30px 5%; 
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /* 之後的 CSS 保持不變... */
+        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
+        .manga-card { background: var(--card-bg); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .manga-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(255, 136, 0, 0.15); }
+        .cover-wrapper { padding-top: 140%; position: relative; background: #e9ecef; }
+        .cover-wrapper img { position: absolute; top: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .manga-card:hover .cover-wrapper img { transform: scale(1.05); }
+        .manga-title { padding: 12px; font-weight: 700; font-size: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .detail-view { max-width: 900px; margin: 30px auto; background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; }
+        .detail-header { display: flex; padding: 30px; background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; gap: 30px; align-items: flex-start; }
+        .detail-cover { width: 180px; border-radius: 8px; border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3); flex-shrink: 0; }
+        .detail-info h1 { margin: 0 0 15px 0; font-size: 28px; color: var(--primary-color); }
+        .detail-info p { line-height: 1.6; color: #ecf0f1; font-size: 15px; margin: 0; }
+        .chapter-container { padding: 30px; }
+        .chapter-container h3 { margin-top: 0; margin-bottom: 20px; border-left: 4px solid var(--primary-color); padding-left: 10px; }
+        .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+        .chapter-item { padding: 10px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; text-align: center; color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+        .chapter-item:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); }
+        #reader-page { background: var(--reader-bg); min-height: 100vh; }
+        .viewer-content { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
+        .viewer-content img { width: 100%; display: block; margin-bottom: 4px; }
+        .reader-toolbar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); color: #fff; padding: 12px 30px; border-radius: 30px; display: flex; gap: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .reader-toolbar div { cursor: pointer; font-weight: 500; font-size: 15px; transition: color 0.2s; }
+        .reader-toolbar div:hover { color: var(--primary-color); }
 
-        /* 漫畫卡片 */
-        .manga-card { 
-            background: var(--card-bg); 
-            border-radius: var(--radius-md); 
-            overflow: hidden; 
-            cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .manga-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(255, 136, 0, 0.15);
-        }
-
-        .cover-wrapper { 
-            padding-top: 140%; /* 調整為更接近漫畫單行本比例 */
-            position: relative; 
-            background: #e9ecef; 
-        }
-        .cover-wrapper img { 
-            position: absolute; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            transition: transform 0.5s ease;
-        }
-        .manga-card:hover .cover-wrapper img {
-            transform: scale(1.05);
-        }
-
-        .manga-title {
-            padding: 12px; 
-            font-weight: 700; 
-            font-size: 15px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* 詳情頁 */
-        .detail-view { 
-            max-width: 900px; 
-            margin: 30px auto; 
-            background: var(--card-bg); 
-            border-radius: var(--radius-lg); 
-            overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            width: 90%;
-        }
-
-        .detail-header { 
-            display: flex; 
-            padding: 30px; 
-            background: linear-gradient(135deg, #2c3e50, #34495e); 
-            color: #fff; 
-            gap: 30px; 
-            align-items: flex-start;
-        }
-        
-        .detail-cover { 
-            width: 180px; 
-            border-radius: 8px;
-            border: 3px solid rgba(255,255,255,0.2); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            flex-shrink: 0;
-        }
-
-        .detail-info h1 {
-            margin: 0 0 15px 0;
-            font-size: 28px;
-            color: var(--primary-color);
-        }
-        .detail-info p {
-            line-height: 1.6;
-            color: #ecf0f1;
-            font-size: 15px;
-            margin: 0;
-        }
-
-        /* 章節列表 */
-        .chapter-container {
-            padding: 30px;
-        }
-        .chapter-container h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 10px;
-        }
-        .chapter-list { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); 
-            gap: 12px; 
-        }
-        
-        .chapter-item { 
-            padding: 10px; 
-            background: #f8f9fa;
-            border: 1px solid #e9ecef; 
-            border-radius: 8px;
-            text-align: center; 
-            color: var(--text-main); 
-            font-size: 14px; 
-            font-weight: 500;
-            cursor: pointer; 
-            transition: all 0.2s ease;
-        }
-        .chapter-item:hover {
-            background: var(--primary-color);
-            color: #fff;
-            border-color: var(--primary-color);
-            transform: translateY(-2px);
-        }
-
-        /* 閱讀器 */
-        #reader-page {
-            background: var(--reader-bg); 
-            min-height: 100vh;
-        }
-        .viewer-content {
-            max-width: 800px; /* 限制電腦版寬度，避免圖片過大 */
-            margin: 0 auto;
-            padding-bottom: 80px; /* 留空間給工具列 */
-        }
-        .viewer-content img { 
-            width: 100%; 
-            display: block; 
-            margin-bottom: 4px; /* 圖片間微小縫隙 */
-        }
-
-        /* 毛玻璃浮動工具列 */
-        .reader-toolbar { 
-            position: fixed; 
-            bottom: 30px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: rgba(30, 30, 30, 0.85); 
-            backdrop-filter: blur(10px);
-            color: #fff; 
-            padding: 12px 30px; 
-            border-radius: 30px; 
-            display: flex; 
-            gap: 25px; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            z-index: 1000;
-        }
-        .reader-toolbar div {
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-        .reader-toolbar div:hover {
-            color: var(--primary-color);
-        }
-
-        /* RWD 響應式微調 */
         @media (max-width: 600px) {
-            .detail-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                padding: 20px;
-            }
-            .detail-cover {
-                width: 140px;
-            }
-            .manga-grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-                gap: 15px;
-            }
+            header { flex-direction: column; gap: 10px; padding: 15px; }
+            .detail-header { flex-direction: column; align-items: center; text-align: center; padding: 20px; }
+            .detail-cover { width: 140px; }
+            .manga-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
         }
     </style>
 </head>
 <body>
 
 <header id="main-header">
-    <div class="logo" onclick="showPage('home-page')">方方Ray專屬漫畫館</div>
-    <div class="btn-home" onclick="showPage('home-page')">返回首頁</div>
+    <div class="header-left">
+        <div class="logo" onclick="showPage('home-page')">方方Ray專屬漫畫館</div>
+        <div class="btn-home" onclick="showPage('home-page')">返回首頁</div>
+    </div>
+    
+    <div class="social-links">
+        <a href="https://www.instagram.com/你的帳號" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.threads.net/@你的帳號" target="_blank" title="Threads"><i class="fa-brands fa-threads"></i></a>
+        <a href="https://twitter.com/你的帳號" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://discord.gg/你的邀請碼" target="_blank" title="Discord"><i class="fa-brands fa-discord"></i></a>
+    </div>
 </header>
 
 <div id="home-page" class="page active">
     <div class="manga-grid" id="home-grid">
-        <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #7f8c8d;">
-            載入漫畫資料中...
-        </div>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #7f8c8d;">載入漫畫資料中...</div>
     </div>
 </div>
 
@@ -304,10 +183,10 @@
 </div>
 
 <script>
+    // JS 部分與你原本的一致
     let mangaData = [];
     let currentMangaIdx = 0;
 
-    // 非同步讀取 JSON 檔案
     async function loadData() {
         try {
             const response = await fetch('data/data.json'); 
@@ -315,11 +194,7 @@
             renderHome();
         } catch (error) {
             console.error('無法讀取 JSON:', error);
-            document.getElementById('home-grid').innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; color: #e74c3c; padding: 40px;">
-                    <h3>讀取失敗</h3>
-                    <p>請確認是否使用 Local Server 開啟網頁，且 data/data.json 檔案存在。</p>
-                </div>`;
+            document.getElementById('home-grid').innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: #e74c3c; padding: 40px;"><h3>讀取失敗</h3><p>請確認 data/data.json 檔案存在。</p></div>`;
         }
     }
 
@@ -339,18 +214,14 @@
         document.getElementById('detail-title').innerText = m.title;
         document.getElementById('detail-img').src = m.cover;
         document.getElementById('detail-desc').innerText = m.desc;
-        
         const list = document.getElementById('detail-chapters');
-        list.innerHTML = m.chapters.map((ch, ci) => `
-            <div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>
-        `).join('');
+        list.innerHTML = m.chapters.map((ch, ci) => `<div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>`).join('');
         showPage('detail-page');
     }
 
     function startReading(chIndex) {
         const images = mangaData[currentMangaIdx].chapters[chIndex].images;
         const viewer = document.getElementById('viewer-content');
-        // 加入 loading="lazy" 增進效能，並加上防呆機制
         viewer.innerHTML = images.map(img => `<img src="${img}" loading="lazy" alt="漫畫頁面">`).join('');
         showPage('reader-page');
     }
@@ -359,10 +230,9 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById('main-header').style.display = (id === 'reader-page') ? 'none' : 'flex';
-        window.scrollTo({top: 0, behavior: 'smooth'}); // 加入平滑滾動回頂部
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-    // 初始化讀取
     loadData();
 </script>
 
