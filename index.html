@@ -63,7 +63,7 @@
     // 非同步讀取 JSON 檔案
     async function loadData() {
         try {
-            const response = await fetch('data.json'); // 讀取同目錄下的 data.json
+            const response = await fetch('data/data.json'); // 讀取同目錄下的 data.json
             mangaData = await response.json();
             renderHome();
         } catch (error) {
