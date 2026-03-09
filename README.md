@@ -13,7 +13,7 @@
 - **創作日誌**：分享創作過程中的心得與草稿。
 
 ## 🛠️ 技術架構
-- **前端技術**：HTML5, CSS3, JavaScript (可根據實際使用的框架如 React/Vue 進行修改)
+- **前端技術**：HTML5, CSS3, JavaScript
 - **託管平台**：GitHub Pages
 
 ## ✉️ 聯絡資訊
