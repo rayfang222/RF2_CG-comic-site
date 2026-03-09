@@ -15,7 +15,7 @@
             --card-bg: #ffffff;
             --text-main: #2c3e50;
             --text-muted: #7f8c8d;
-            --reader-bg: #0f0f0f; 
+            --reader-bg: #000000; 
             --radius-md: 12px;
             --radius-lg: 20px;
             --ig-color: #E1306C;
@@ -30,13 +30,13 @@
             color: var(--text-main);
             margin: 0; 
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         /* 頁面切換動畫 */
         .page { 
             display: none; 
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
         }
         .page.active { 
             display: block; 
@@ -65,73 +65,104 @@
         }
         
         .header-left { display: flex; align-items: center; gap: 20px; }
-
-        .logo {
-            cursor: pointer; 
-            color: var(--primary-color); 
-            font-weight: 700; 
-            font-size: 22px;
-            transition: color 0.2s;
-        }
-        .logo:hover { color: var(--primary-hover); }
-
-        /* 社群連結樣式 */
-        .social-links {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .social-links a {
-            font-size: 20px;
-            color: var(--text-muted);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-        .social-links a:hover { transform: scale(1.2); }
-        .social-links .fa-instagram:hover { color: var(--ig-color); }
-        .social-links .fa-threads:hover { color: var(--threads-color); }
-        .social-links .fa-x-twitter:hover { color: var(--x-color); }
-        .social-links .fa-discord:hover { color: var(--dc-color); }
-
-        .btn-home {
-            cursor: pointer; 
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: color 0.2s;
-        }
+        .logo { cursor: pointer; color: var(--primary-color); font-weight: 700; font-size: 22px; }
+        .btn-home { cursor: pointer; font-size: 15px; font-weight: 500; color: var(--text-muted); }
         .btn-home:hover { color: var(--primary-color); }
 
-        /* 之後的 CSS 保持不變... */
+        .social-links { display: flex; gap: 15px; align-items: center; }
+        .social-links a { font-size: 20px; color: var(--text-muted); transition: all 0.3s ease; text-decoration: none; }
+        .social-links a:hover { transform: scale(1.2); }
+
+        /* 首頁與詳情頁樣式 */
         .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
-        .manga-card { background: var(--card-bg); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .manga-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(255, 136, 0, 0.15); }
+        .manga-card { background: var(--card-bg); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .manga-card:hover { transform: translateY(-8px); }
         .cover-wrapper { padding-top: 140%; position: relative; background: #e9ecef; }
-        .cover-wrapper img { position: absolute; top: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .manga-card:hover .cover-wrapper img { transform: scale(1.05); }
-        .manga-title { padding: 12px; font-weight: 700; font-size: 15px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .detail-view { max-width: 900px; margin: 30px auto; background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 90%; }
-        .detail-header { display: flex; padding: 30px; background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; gap: 30px; align-items: flex-start; }
-        .detail-cover { width: 180px; border-radius: 8px; border: 3px solid rgba(255,255,255,0.2); box-shadow: 0 5px 15px rgba(0,0,0,0.3); flex-shrink: 0; }
-        .detail-info h1 { margin: 0 0 15px 0; font-size: 28px; color: var(--primary-color); }
-        .detail-info p { line-height: 1.6; color: #ecf0f1; font-size: 15px; margin: 0; }
+        .cover-wrapper img { position: absolute; top: 0; width: 100%; height: 100%; object-fit: cover; }
+        .manga-title { padding: 12px; font-weight: 700; font-size: 15px; text-align: center; }
+
+        .detail-view { max-width: 900px; margin: 30px auto; background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden; width: 95%; }
+        .detail-header { display: flex; padding: 30px; background: linear-gradient(135deg, #2c3e50, #34495e); color: #fff; gap: 30px; }
+        .detail-cover { width: 150px; border-radius: 8px; flex-shrink: 0; }
         .chapter-container { padding: 30px; }
-        .chapter-container h3 { margin-top: 0; margin-bottom: 20px; border-left: 4px solid var(--primary-color); padding-left: 10px; }
         .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
-        .chapter-item { padding: 10px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; text-align: center; color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
-        .chapter-item:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); }
-        #reader-page { background: var(--reader-bg); min-height: 100vh; }
-        .viewer-content { max-width: 800px; margin: 0 auto; padding-bottom: 80px; }
-        .viewer-content img { width: 100%; display: block; margin-bottom: 4px; }
-        .reader-toolbar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); color: #fff; padding: 12px 30px; border-radius: 30px; display: flex; gap: 25px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
-        .reader-toolbar div { cursor: pointer; font-weight: 500; font-size: 15px; transition: color 0.2s; }
-        .reader-toolbar div:hover { color: var(--primary-color); }
+        .chapter-item { padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #ddd; }
+        .chapter-item:hover { background: var(--primary-color); color: white; }
+
+        /* --- 閱讀器核心優化 --- */
+        #reader-page { 
+            background: var(--reader-bg); 
+            height: 100vh; 
+            width: 100vw;
+            position: fixed;
+            top: 0; left: 0;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 點擊熱區控制 */
+        .click-zone {
+            position: absolute;
+            top: 0; height: 100%;
+            z-index: 10;
+        }
+        .zone-prev { left: 0; width: 30%; cursor: w-resize; }
+        .zone-next { right: 0; width: 30%; cursor: e-resize; }
+        .zone-menu { left: 30%; width: 40%; cursor: pointer; }
+
+        .viewer-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #reader-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* 閱讀器浮動工具列 */
+        .reader-toolbar { 
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(30, 30, 30, 0.9); 
+            color: #fff; 
+            padding: 10px 25px; 
+            border-radius: 30px; 
+            display: flex; 
+            gap: 20px; 
+            z-index: 1000;
+            transition: opacity 0.3s;
+            opacity: 0; /* 預設隱藏，點擊中間顯示 */
+            pointer-events: none;
+        }
+        .reader-toolbar.show { opacity: 1; pointer-events: auto; }
+        
+        .page-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 100;
+        }
 
         @media (max-width: 600px) {
-            header { flex-direction: column; gap: 10px; padding: 15px; }
-            .detail-header { flex-direction: column; align-items: center; text-align: center; padding: 20px; }
-            .detail-cover { width: 140px; }
-            .manga-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+            header { padding: 10px; }
+            .detail-header { flex-direction: column; align-items: center; text-align: center; }
         }
     </style>
 </head>
@@ -142,12 +173,9 @@
         <div class="logo" onclick="showPage('home-page')">方方Ray專屬漫畫館</div>
         <div class="btn-home" onclick="showPage('home-page')">返回首頁</div>
     </div>
-    
     <div class="social-links">
-        <a href="https://www.instagram.com/rf2_cg?igsh=YjJ4NndzbHY3aXcz&utm_source=qr" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.threads.com/@rf2_cg?igshid=NTc4MTIwNjQ2YQ==" target="_blank" title="Threads"><i class="fa-brands fa-threads"></i></a>
-        <a href="https://x.com/rf2_cg?s=21" target="_blank" title="X"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="https://discord.gg/你的邀請碼" target="_blank" title="Discord"><i class="fa-brands fa-discord"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-discord"></i></a>
     </div>
 </header>
 
@@ -174,27 +202,46 @@
 </div>
 
 <div id="reader-page" class="page">
-    <div class="viewer-content" id="viewer-content"></div>
-    <div class="reader-toolbar">
-        <div onclick="showPage('detail-page')">≡ 目錄</div>
-        <div onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ 頂部</div>
-        <div onclick="showPage('home-page')">⌂ 首頁</div>
+    <div class="page-counter" id="page-counter">1 / 1</div>
+    
+    <div class="click-zone zone-prev" onclick="prevPage()"></div>
+    <div class="click-zone zone-menu" onclick="toggleToolbar()"></div>
+    <div class="click-zone zone-next" onclick="nextPage()"></div>
+
+    <div class="viewer-container">
+        <img id="reader-img" src="" alt="漫畫內容">
+    </div>
+
+    <div class="reader-toolbar" id="reader-toolbar">
+        <div onclick="showPage('detail-page')" style="cursor:pointer">≡ 目錄</div>
+        <div onclick="showPage('home-page')" style="cursor:pointer">⌂ 首頁</div>
     </div>
 </div>
 
 <script>
-    // JS 部分與你原本的一致
     let mangaData = [];
     let currentMangaIdx = 0;
+    let currentChapterIdx = 0;
+    let currentPageIdx = 0;
+    let currentImages = [];
 
+    // 模擬載入/讀取數據
     async function loadData() {
         try {
+            // 注意：實際環境中需確保 data/data.json 路徑正確
             const response = await fetch('data/data.json'); 
             mangaData = await response.json();
             renderHome();
         } catch (error) {
             console.error('無法讀取 JSON:', error);
-            document.getElementById('home-grid').innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: #e74c3c; padding: 40px;"><h3>讀取失敗</h3><p>請確認 data/data.json 檔案存在。</p></div>`;
+            // 測試用 Dummy Data（若讀取失敗時顯示）
+            mangaData = [{
+                title: "範例漫畫",
+                cover: "https://via.placeholder.com/200x280",
+                desc: "這是一個測試範例",
+                chapters: [{ name: "第 01 話", images: ["https://via.placeholder.com/800x1200?text=Page1", "https://via.placeholder.com/800x1200?text=Page2"] }]
+            }];
+            renderHome();
         }
     }
 
@@ -202,7 +249,7 @@
         const grid = document.getElementById('home-grid');
         grid.innerHTML = mangaData.map((m, i) => `
             <div class="manga-card" onclick="openManga(${i})">
-                <div class="cover-wrapper"><img src="${m.cover}" alt="${m.title}" loading="lazy"></div>
+                <div class="cover-wrapper"><img src="${m.cover}" alt="${m.title}"></div>
                 <div class="manga-title">${m.title}</div>
             </div>
         `).join('');
@@ -215,23 +262,78 @@
         document.getElementById('detail-img').src = m.cover;
         document.getElementById('detail-desc').innerText = m.desc;
         const list = document.getElementById('detail-chapters');
-        list.innerHTML = m.chapters.map((ch, ci) => `<div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>`).join('');
+        list.innerHTML = m.chapters.map((ch, ci) => `
+            <div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>
+        `).join('');
         showPage('detail-page');
     }
 
     function startReading(chIndex) {
-        const images = mangaData[currentMangaIdx].chapters[chIndex].images;
-        const viewer = document.getElementById('viewer-content');
-        viewer.innerHTML = images.map(img => `<img src="${img}" loading="lazy" alt="漫畫頁面">`).join('');
+        currentChapterIdx = chIndex;
+        currentPageIdx = 0;
+        currentImages = mangaData[currentMangaIdx].chapters[chIndex].images;
+        updateReaderImage();
         showPage('reader-page');
+        
+        // 隱藏工具列
+        document.getElementById('reader-toolbar').classList.remove('show');
+    }
+
+    function updateReaderImage() {
+        const imgDisplay = document.getElementById('reader-img');
+        const counter = document.getElementById('page-counter');
+        
+        imgDisplay.src = currentImages[currentPageIdx];
+        counter.innerText = `${currentPageIdx + 1} / ${currentImages.length}`;
+        window.scrollTo(0,0);
+    }
+
+    function nextPage() {
+        if (currentPageIdx < currentImages.length - 1) {
+            currentPageIdx++;
+            updateReaderImage();
+        } else {
+            alert("已經是最後一頁了");
+        }
+    }
+
+    function prevPage() {
+        if (currentPageIdx > 0) {
+            currentPageIdx--;
+            updateReaderImage();
+        } else {
+            alert("這是第一頁");
+        }
+    }
+
+    function toggleToolbar() {
+        document.getElementById('reader-toolbar').classList.toggle('show');
     }
 
     function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.page').forEach(p => {
+            p.classList.remove('active');
+            p.style.display = 'none';
+        });
+        
+        const target = document.getElementById(id);
+        target.style.display = (id === 'reader-page') ? 'flex' : 'block';
+        setTimeout(() => target.classList.add('active'), 10);
+
+        // 控制主導覽列顯示
         document.getElementById('main-header').style.display = (id === 'reader-page') ? 'none' : 'flex';
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        
+        // 進入閱讀模式時禁止捲動
+        document.body.style.overflow = (id === 'reader-page') ? 'hidden' : 'auto';
     }
+
+    // 鍵盤左右鍵支援
+    document.addEventListener('keydown', (e) => {
+        if (document.getElementById('reader-page').classList.contains('active')) {
+            if (e.key === "ArrowRight") nextPage();
+            if (e.key === "ArrowLeft") prevPage();
+        }
+    });
 
     loadData();
 </script>
