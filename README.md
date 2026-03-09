@@ -1,7 +1,5 @@
 # 方方Ray專屬漫畫館 (RF2_CG-comic-site)
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Status](https://img.shields.io/badge/status-Active-brightgreen.svg)
 
 這是創作者 **方方Ray** 的個人作品展示平台，主要存放個人原創漫畫、CG 插畫以及相關創作專案。
 
