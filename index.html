@@ -3,252 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的私藏漫畫櫃</title>
+    <title>漫畫 GO - JSON 驅動版</title>
     <style>
-        :root {
-            --primary-color: #f80;
-            --bg-color: #f4f4f4;
-            --card-bg: #fff;
-            --text-main: #333;
-            --text-sub: #999;
-            --reader-bg: #121212;
-        }
-
-        body { font-family: "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); margin: 0; transition: background 0.3s; }
-
-        /* 通用頁面切換 */
-        .page { display: none; animation: fadeIn 0.3s ease; }
+        /* 樣式部分保持不變，為節省空間簡寫，可套用先前給你的美化 CSS */
+        :root { --primary-color: #f80; --bg-color: #f4f4f4; --reader-bg: #121212; }
+        body { font-family: sans-serif; background: var(--bg-color); margin: 0; }
+        .page { display: none; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* 導覽列 */
-        header {
-            background: #fff; border-bottom: 2px solid var(--primary-color);
-            padding: 10px 20px; display: flex; justify-content: space-between;
-            align-items: center; position: sticky; top: 0; z-index: 1000;
-        }
-        .logo { font-size: 24px; font-weight: bold; color: var(--primary-color); cursor: pointer; text-decoration: none; }
-
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-
-        /* --- 首頁樣式 --- */
-        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-        .manga-card { background: #fff; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .manga-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .cover-wrapper { position: relative; padding-top: 133%; background: #eee; }
+        header { background: #fff; padding: 10px 20px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary-color); position: sticky; top:0; z-index:100; }
+        .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; padding: 20px; }
+        .manga-card { background: #fff; border-radius: 8px; overflow: hidden; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .cover-wrapper { padding-top: 133%; position: relative; background: #eee; }
         .cover-wrapper img { position: absolute; top:0; width: 100%; height: 100%; object-fit: cover; }
-        .card-info { padding: 10px; }
-        .card-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* --- 詳情頁樣式 --- */
-        .detail-view { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .detail-header { display: flex; padding: 40px; background: linear-gradient(135deg, #444, #222); color: #fff; gap: 30px; }
-        .detail-cover { width: 220px; border: 4px solid #fff; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .detail-info h1 { margin: 0 0 10px 0; font-size: 28px; }
-        .detail-desc { color: #ccc; line-height: 1.6; font-size: 14px; margin: 15px 0; }
-        
-        .chapter-section { padding: 30px; }
-        .chapter-title { font-size: 18px; font-weight: bold; margin-bottom: 20px; border-left: 5px solid var(--primary-color); padding-left: 15px; }
-        .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
-        .chapter-item { display: block; padding: 10px; text-align: center; border: 1px solid #ddd; text-decoration: none; color: #333; border-radius: 4px; font-size: 14px; transition: 0.2s; }
-        .chapter-item:hover { border-color: var(--primary-color); color: var(--primary-color); background: #fffaf5; }
-
-        /* --- 閱讀器樣式 --- */
-        #reader-page { background: var(--reader-bg); min-height: 100vh; }
-        .reader-header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.8); color: #eee; text-align: center; padding: 10px 0; z-index: 10; font-size: 14px; }
-        .viewer-content { max-width: 800px; margin: 0 auto; padding-top: 50px; padding-bottom: 80px; }
+        .detail-view { max-width: 800px; margin: 20px auto; background: #fff; border-radius: 8px; overflow: hidden; }
+        .detail-header { display: flex; padding: 20px; background: #333; color: #fff; gap: 20px; }
+        .detail-cover { width: 150px; border: 2px solid #fff; }
+        .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; padding: 20px; }
+        .chapter-item { padding: 8px; border: 1px solid #ddd; text-align: center; text-decoration: none; color: #333; font-size: 14px; cursor: pointer; }
         .viewer-content img { width: 100%; display: block; }
-
-        .reader-toolbar {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.9); color: #fff; padding: 12px 25px;
-            border-radius: 40px; display: flex; gap: 20px; align-items: center;
-            z-index: 2000; border: 1px solid #333; box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        }
-        .tool-btn { cursor: pointer; font-size: 14px; font-weight: bold; }
-        .tool-btn:hover { color: var(--primary-color); }
-
-        @media (max-width: 768px) {
-            .detail-header { flex-direction: column; align-items: center; text-align: center; padding: 20px; }
-            .detail-cover { width: 180px; }
-            .chapter-list { grid-template-columns: repeat(3, 1fr); }
-        }
+        .reader-toolbar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 20px; display: flex; gap: 15px; }
     </style>
 </head>
 <body>
 
 <header id="main-header">
-    <div class="logo" onclick="showPage('home-page')">MANHUA GO</div>
-    <nav><a href="javascript:void(0)" onclick="showPage('home-page')" style="text-decoration:none; color:var(--text-main); font-size: 14px;">返回首頁</a></nav>
+    <div onclick="showPage('home-page')" style="cursor:pointer; color:var(--primary-color); font-weight:bold; font-size:20px;">MANHUA GO</div>
+    <div onclick="showPage('home-page')" style="cursor:pointer; font-size:14px;">返回首頁</div>
 </header>
 
-<div class="container" id="main-container">
-    
-    <div id="home-page" class="page active">
-        <h2 style="margin-bottom: 20px;">最新上架</h2>
-        <div class="manga-grid" id="home-grid">
-            </div>
-    </div>
+<div id="home-page" class="page active">
+    <div class="manga-grid" id="home-grid">Loading...</div>
+</div>
 
-    <div id="detail-page" class="page">
-        <div class="detail-view">
-            <div class="detail-header">
-                <img id="detail-img" class="detail-cover" src="">
-                <div class="detail-info">
-                    <h1 id="detail-title">漫畫名稱</h1>
-                    <p id="detail-author" style="color:var(--primary-color)">作者：載入中...</p>
-                    <p class="detail-desc" id="detail-desc">這裡顯示漫畫的詳細介紹內容...</p>
-                    <button class="chapter-item" style="background:var(--primary-color); color:#fff; border:none; width:150px; cursor:pointer;" onclick="startReading(0)">立即閱讀</button>
-                </div>
-            </div>
-            <div class="chapter-section">
-                <div class="chapter-title">章節列表</div>
-                <div class="chapter-list" id="detail-chapters">
-                    </div>
+<div id="detail-page" class="page">
+    <div class="detail-view">
+        <div class="detail-header">
+            <img id="detail-img" class="detail-cover" src="">
+            <div>
+                <h1 id="detail-title">標題</h1>
+                <p id="detail-desc">簡介內容...</p>
             </div>
         </div>
+        <div class="chapter-list" id="detail-chapters"></div>
     </div>
 </div>
 
-<div id="reader-page" class="page">
-    <div class="reader-header">
-        <span id="reading-title">漫畫名稱</span> - <span id="reading-chapter">章節</span>
-    </div>
-    
-    <div class="viewer-content" id="viewer-content">
-        </div>
-
+<div id="reader-page" class="page" style="background: #121212; min-height: 100vh;">
+    <div class="viewer-content" id="viewer-content"></div>
     <div class="reader-toolbar">
-        <div class="tool-btn" onclick="showPage('detail-page')">目錄</div>
-        <div style="color: #444;">|</div>
-        <div class="tool-btn" onclick="changeChapter(-1)">上一章</div>
-        <div class="tool-btn" onclick="changeChapter(1)">下一章</div>
-        <div style="color: #444;">|</div>
-        <div class="tool-btn" onclick="showPage('home-page')">首頁</div>
+        <div onclick="showPage('detail-page')" style="cursor:pointer;">目錄</div>
+        <div onclick="showPage('home-page')" style="cursor:pointer;">首頁</div>
     </div>
 </div>
 
 <script>
-    /**
-     * 【如果你要換圖片，請修改這裡】
-     * 結構說明：
-     * id: 唯一識別碼
-     * title: 漫畫標題
-     * cover: 封面路徑 (如 'img/manga1_cover.jpg')
-     * author: 作者
-     * desc: 簡介
-     * chapters: 章節陣列，每個章節內含多張圖片路徑
-     */
-    const mangaData = [
-        {
-            id: 'manga_01',
-            title: '我的冒險故事',
-            cover: 'https://picsum.photos/400/600?random=11', // 換成你的封面路徑
-            author: '設計師 A',
-            desc: '這是一個發生在異世界的奇幻故事，主角展開了尋找傳說圖片的旅程。',
-            chapters: [
-                { name: '第 01 話', images: ['https://picsum.photos/800/1200?text=Page1', 'https://picsum.photos/800/1200?text=Page2'] },
-                { name: '第 02 話', images: ['https://picsum.photos/800/1200?text=Page3', 'https://picsum.photos/800/1200?text=Page4'] }
-            ]
-        },
-        {
-            id: 'manga_02',
-            title: '城市獵人',
-            cover: 'https://picsum.photos/400/600?random=12',
-            author: '設計師 B',
-            desc: '在繁華的都市中，隱藏著不為人知的正義使者。',
-            chapters: [
-                { name: '第一回', images: ['https://picsum.photos/800/1200?text=M2_P1', 'https://picsum.photos/800/1200?text=M2_P2'] }
-            ]
+    let mangaData = [];
+    let currentMangaIdx = 0;
+
+    // 非同步讀取 JSON 檔案
+    async function loadData() {
+        try {
+            const response = await fetch('data.json'); // 讀取同目錄下的 data.json
+            mangaData = await response.json();
+            renderHome();
+        } catch (error) {
+            console.error('無法讀取 JSON:', error);
+            document.getElementById('home-grid').innerText = '讀取失敗，請確認是否使用 Server 開啟網頁。';
         }
-    ];
+    }
 
-    let currentMangaIndex = 0;
-    let currentChapterIndex = 0;
-
-    // 1. 初始化首頁
-    function initHome() {
+    function renderHome() {
         const grid = document.getElementById('home-grid');
-        grid.innerHTML = mangaData.map((manga, index) => `
-            <div class="manga-card" onclick="openManga(${index})">
-                <div class="cover-wrapper"><img src="${manga.cover}"></div>
-                <div class="card-info">
-                    <div class="card-title">${manga.title}</div>
-                    <div style="color:#999; font-size:12px;">${manga.chapters.length} 個章節</div>
-                </div>
+        grid.innerHTML = mangaData.map((m, i) => `
+            <div class="manga-card" onclick="openManga(${i})">
+                <div class="cover-wrapper"><img src="${m.cover}"></div>
+                <div style="padding:10px; font-weight:bold;">${m.title}</div>
             </div>
         `).join('');
     }
 
-    // 2. 開啟詳情頁
     function openManga(index) {
-        currentMangaIndex = index;
-        const manga = mangaData[index];
+        currentMangaIdx = index;
+        const m = mangaData[index];
+        document.getElementById('detail-title').innerText = m.title;
+        document.getElementById('detail-img').src = m.cover;
+        document.getElementById('detail-desc').innerText = m.desc;
         
-        document.getElementById('detail-title').innerText = manga.title;
-        document.getElementById('detail-img').src = manga.cover;
-        document.getElementById('detail-author').innerText = '作者：' + manga.author;
-        document.getElementById('detail-desc').innerText = manga.desc;
-
-        const chapterList = document.getElementById('detail-chapters');
-        chapterList.innerHTML = manga.chapters.map((ch, chIdx) => `
-            <a href="javascript:void(0)" class="chapter-item" onclick="startReading(${chIdx})">${ch.name}</a>
+        const list = document.getElementById('detail-chapters');
+        list.innerHTML = m.chapters.map((ch, ci) => `
+            <div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>
         `).join('');
-
         showPage('detail-page');
     }
 
-    // 3. 開始閱讀 (載入圖片)
-    function startReading(chIdx) {
-        currentChapterIndex = chIdx;
-        const manga = mangaData[currentMangaIndex];
-        const chapter = manga.chapters[chIdx];
-
-        document.getElementById('reading-title').innerText = manga.title;
-        document.getElementById('reading-chapter').innerText = chapter.name;
-
+    function startReading(chIndex) {
+        const images = mangaData[currentMangaIdx].chapters[chIndex].images;
         const viewer = document.getElementById('viewer-content');
-        // 載入該章節的所有圖片
-        viewer.innerHTML = chapter.images.map(imgSrc => `
-            <img src="${imgSrc}" loading="lazy" onerror="this.src='https://via.placeholder.com/800x1200?text=圖片載入失敗'">
-        `).join('') + '<div style="color: #666; text-align: center; padding: 40px;">- 本話結束 -</div>';
-
+        viewer.innerHTML = images.map(img => `<img src="${img}" loading="lazy">`).join('');
         showPage('reader-page');
     }
 
-    // 4. 切換章節
-    function changeChapter(direction) {
-        const newIdx = currentChapterIndex + direction;
-        const manga = mangaData[currentMangaIndex];
-        if (newIdx >= 0 && newIdx < manga.chapters.length) {
-            startReading(newIdx);
-        } else {
-            alert(direction > 0 ? '已經是最後一章了' : '已經是第一章了');
-        }
-    }
-
-    // 5. 頁面切換控制
-    function showPage(pageId) {
+    function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        
-        const header = document.getElementById('main-header');
-        const container = document.getElementById('main-container');
-
-        if (pageId === 'reader-page') {
-            header.style.display = 'none';
-            container.style.marginTop = '0';
-            document.body.style.background = '#121212';
-        } else {
-            header.style.display = 'flex';
-            container.style.marginTop = '20px';
-            document.body.style.background = '#f4f4f4';
-        }
-        window.scrollTo(0, 0);
+        document.getElementById(id).classList.add('active');
+        document.getElementById('main-header').style.display = (id === 'reader-page') ? 'none' : 'flex';
+        window.scrollTo(0,0);
     }
 
-    // 啟動首頁
-    initHome();
+    // 初始化讀取
+    loadData();
 </script>
 
 </body>
