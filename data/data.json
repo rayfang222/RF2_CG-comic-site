@@ -8,11 +8,11 @@
     "chapters": [
       {
         "name": "第 01 話",
-        "images": ["https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=1"]
+        "images": ["https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=2", "https://picsum.photos/400/600?random=3"]
       },
       {
         "name": "第 02 話",
-        "images": ["https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=1", "https://picsum.photos/400/600?random=1"]
+        "images": ["https://picsum.photos/400/600?random=4", "https://picsum.photos/400/600?random=5", "https://picsum.photos/400/600?random=6"]
       }
     ]
   },
