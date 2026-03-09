@@ -3,223 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>方方Ray | 你的專屬漫畫館</title>
+    <title>方方Ray</title>
     <style>
-        /* 全域變數設定 */
         :root {
-            --primary-color: #ff4757;
-            --bg-color: #0f0f0f;
-            --card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --text-dim: #a0a0a0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            --primary-color: #f80; /* 漫畫櫃經典橘色 */
+            --bg-color: #f4f4f4;
+            --card-bg: #fff;
+            --text-main: #333;
+            --text-sub: #999;
         }
 
         body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            margin: 0;
+            color: var(--text-main);
         }
 
-        /* 導航欄 */
-        nav {
+        /* 導覽列 */
+        header {
+            background: #fff;
+            border-bottom: 2px solid var(--primary-color);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 24px;
             font-weight: bold;
             color: var(--primary-color);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 2rem;
-        }
-
-        .nav-links a {
-            color: var(--text-color);
             text-decoration: none;
-            transition: 0.3s;
         }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        /* 橫幅廣告 (Hero Section) */
-        .hero {
-            height: 60vh;
-            background: linear-gradient(to bottom, transparent, var(--bg-color)),
-                        url('https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&q=80&w=1200') center/cover;
+        .search-bar {
+            flex-grow: 1;
+            max-width: 500px;
+            margin: 0 20px;
             display: flex;
-            align-items: flex-end;
-            padding: 0 5% 3rem;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        .search-bar input {
+            width: 100%;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px 0 0 20px;
+            outline: none;
         }
 
-        /* 漫畫網格 */
+        .search-bar button {
+            padding: 8px 20px;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+        }
+
+        /* 主體內容容器 */
         .container {
-            padding: 2rem 5%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--primary-color);
-            padding-left: 15px;
+        /* 分類過濾器 */
+        .filter-section {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
+        .filter-group {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .filter-label {
+            color: var(--text-sub);
+            width: 60px;
+            flex-shrink: 0;
+        }
+
+        .filter-tags span {
+            margin-right: 15px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .filter-tags span:hover, .filter-tags span.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* 漫畫網格佈局 */
         .manga-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 25px;
+            gap: 20px;
         }
 
         /* 漫畫卡片設計 */
         .manga-card {
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 5px;
             overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
         }
 
         .manga-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
-        .manga-card img {
+        .cover-wrapper {
+            position: relative;
             width: 100%;
-            aspect-ratio: 2/3;
+            padding-top: 133%; /* 3:4 比例 */
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .cover-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
+        .status-tag {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
         .manga-info {
-            padding: 12px;
+            padding: 10px;
         }
 
         .manga-title {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .manga-chapter {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-top: 5px;
+        .manga-update {
+            font-size: 12px;
+            color: var(--text-sub);
         }
 
-        .badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--primary-color);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+        .latest-chapter {
+            color: var(--primary-color);
+            font-weight: 500;
         }
 
-        /* 響應式調整 */
-        @media (max-width: 768px) {
-            .hero-content h1 { font-size: 2rem; }
-            .nav-links { display: none; }
-            .manga-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+        /* 手機端調整 */
+        @media (max-width: 600px) {
+            .manga-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 10px;
+            }
+            .search-bar { display: none; }
         }
     </style>
 </head>
 <body>
 
+<header>
+    <a href="#" class="logo">方方Ray</a>
+    <div class="search-bar">
+        <input type="text" placeholder="搜尋漫畫、作者、類型...">
+        <button>搜尋</button>
+    </div>
     <nav>
-        <div class="logo">方方Ray</div>
-        <ul class="nav-links">
-            <li><a href="#">首頁</a></li>
-            <li><a href="#">熱門</a></li>
-            <li><a href="#">分類</a></li>
-            <li><a href="#">書架</a></li>
-        </ul>
+        <a href="#" style="text-decoration:none; color:var(--text-main);">登入</a>
     </nav>
+</header>
 
-    <header class="hero">
-        <div class="hero-content">
-            <span class="badge">今日推薦</span>
-            <h1>本週最熱門連載</h1>
-            <p>探索超過 10,000 部精彩漫畫作品</p>
+<div class="container">
+    <div class="filter-section">
+        <div class="filter-group">
+            <div class="filter-label">類型：</div>
+            <div class="filter-tags">
+                <span>熱血</span><span>冒險</span><span>校園</span><span>奇幻</span><span>恐怖</span>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <main class="container">
-        <h2 class="section-title">熱門更新</h2>
+    <div class="manga-grid">
+        <div class="manga-card">
+            <div class="cover-wrapper">
+                <img src="https://picsum.photos/300/400?random=1" alt="漫畫封面">
+                <span class="status-tag">連載中</span>
+            </div>
+            <div class="manga-info">
+                <div class="manga-title">進擊的巨人：後傳</div>
+                <div class="manga-update">更新至 <span class="latest-chapter">第 139 話</span></div>
+            </div>
+        </div>
+
+        <div class="manga-card">
+            <div class="cover-wrapper">
+                <img src="https://picsum.photos/300/400?random=2" alt="漫畫封面">
+                <span class="status-tag">完結</span>
+            </div>
+            <div class="manga-info">
+                <div class="manga-title">咒術迴戰</div>
+                <div class="manga-update">更新至 <span class="latest-chapter">第 256 話</span></div>
+            </div>
+        </div>
+
+        <div class="manga-card">
+            <div class="cover-wrapper">
+                <img src="https://picsum.photos/300/400?random=3" alt="漫畫封面">
+                <span class="status-tag">連載中</span>
+            </div>
+            <div class="manga-info">
+                <div class="manga-title">一拳超人</div>
+                <div class="manga-update">更新至 <span class="latest-chapter">第 200 話</span></div>
+            </div>
+        </div>
         
-        <div class="manga-grid">
-            <div class="manga-card">
-                <span class="badge">New</span>
-                <img src="https://picsum.photos/seed/manga1/400/600" alt="Manga Cover">
-                <div class="manga-info">
-                    <div class="manga-title">A</div>
-                    <div class="manga-chapter">第 124 話</div>
-                </div>
-            </div>
-
-            <div class="manga-card">
-                <img src="https://picsum.photos/seed/manga2/400/600" alt="Manga Cover">
-                <div class="manga-info">
-                    <div class="manga-title">B</div>
-                    <div class="manga-chapter">第 42 話</div>
-                </div>
-            </div>
-
-            <div class="manga-card">
-                <img src="https://picsum.photos/seed/manga3/400/600" alt="Manga Cover">
-                <div class="manga-info">
-                    <div class="manga-title">C</div>
-                    <div class="manga-chapter">第 88 話</div>
-                </div>
-            </div>
-
-            <div class="manga-card">
-                <span class="badge">Hot</span>
-                <img src="https://picsum.photos/seed/manga4/400/600" alt="Manga Cover">
-                <div class="manga-info">
-                    <div class="manga-title">D</div>
-                    <div class="manga-chapter">第 256 話</div>
-                </div>
-            </div>
-
-            <div class="manga-card"><img src="https://picsum.photos/seed/manga5/400/600"><div class="manga-info"><div class="manga-title">E</div><div class="manga-chapter">第 15 話</div></div></div>
-            <div class="manga-card"><img src="https://picsum.photos/seed/manga6/400/600"><div class="manga-info"><div class="manga-title">F</div><div class="manga-chapter">第 03 話</div></div></div>
-        </div>
-    </main>
+        <div class="manga-card"><div class="cover-wrapper"><img src="https://picsum.photos/300/400?random=4"><span class="status-tag">連載中</span></div><div class="manga-info"><div class="manga-title">排球少年</div><div class="manga-update">更新至 <span class="latest-chapter">番外篇</span></div></div></div>
+        <div class="manga-card"><div class="cover-wrapper"><img src="https://picsum.photos/300/400?random=5"><span class="status-tag">完結</span></div><div class="manga-info"><div class="manga-title">鬼滅之刃</div><div class="manga-update">更新至 <span class="latest-chapter">最終話</span></div></div></div>
+        <div class="manga-card"><div class="cover-wrapper"><img src="https://picsum.photos/300/400?random=6"><span class="status-tag">連載中</span></div><div class="manga-info"><div class="manga-title">我的英雄學院</div><div class="manga-update">更新至 <span class="latest-chapter">第 420 話</span></div></div></div>
+    </div>
+</div>
 
 </body>
 </html>
