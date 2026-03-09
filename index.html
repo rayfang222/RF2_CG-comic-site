@@ -15,31 +15,55 @@
             --card-bg: #ffffff;
             --text-main: #2c3e50;
             --text-muted: #7f8c8d;
-            --reader-bg: #000000; 
+            --reader-bg: #0f0f0f; 
             --radius-md: 12px;
             --radius-lg: 20px;
+            --ig-color: #E1306C;
+            --threads-color: #000000;
+            --x-color: #000000;
+            --dc-color: #5865F2;
         }
 
-        body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; overflow-x: hidden; }
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background: var(--bg-color); 
+            color: var(--text-main);
+            margin: 0; 
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
 
-        /* 頁面切換 */
-        .page { display: none; opacity: 0; }
+        /* 頁面切換動畫 */
+        .page { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
         .page.active { display: block; opacity: 1; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Header */
-        header { 
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
-            padding: 12px 5%; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--primary-color); position: sticky; top: 0; z-index: 100;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        /* 導覽列 */
+        header { 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px);
+            padding: 12px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 2px solid var(--primary-color); 
+            position: sticky; top: 0; z-index: 100; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { cursor: pointer; color: var(--primary-color); font-weight: 700; font-size: 22px; }
-        .social-links { display: flex; gap: 15px; }
-        .social-links a { font-size: 20px; color: var(--text-muted); text-decoration: none; transition: 0.3s; }
-        .social-links a:hover { transform: scale(1.2); color: var(--primary-color); }
+        .btn-home { cursor: pointer; font-size: 15px; color: var(--text-muted); }
 
-        /* 列表與詳情 */
+        .social-links { display: flex; gap: 15px; }
+        .social-links a { font-size: 20px; color: var(--text-muted); transition: transform 0.2s; }
+        .social-links a:hover { transform: scale(1.2); }
+
+        /* 漫畫網格 */
         .manga-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
         .manga-card { background: var(--card-bg); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
         .manga-card:hover { transform: translateY(-8px); }
@@ -47,53 +71,57 @@
         .cover-wrapper img { position: absolute; top: 0; width: 100%; height: 100%; object-fit: cover; }
         .manga-title { padding: 12px; font-weight: 700; text-align: center; }
 
+        /* 詳情頁 */
         .detail-view { max-width: 900px; margin: 30px auto; background: var(--card-bg); border-radius: var(--radius-lg); overflow: hidden; width: 90%; }
         .detail-header { display: flex; padding: 30px; background: #2c3e50; color: #fff; gap: 30px; }
-        .detail-cover { width: 180px; border-radius: 8px; flex-shrink: 0; }
+        .detail-cover { width: 180px; border-radius: 8px; }
         .chapter-container { padding: 30px; }
         .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
         .chapter-item { padding: 10px; background: #f8f9fa; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #ddd; }
         .chapter-item:hover { background: var(--primary-color); color: #fff; }
 
-        /* --- 閱讀器優化核心樣式 --- */
-        #reader-page { background: var(--reader-bg); height: 100vh; width: 100vw; overflow: hidden; position: fixed; top: 0; left: 0; }
-        
-        .reader-container { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
-        #reader-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        /* 閱讀器頁面 - 重點更新內容 */
+        #reader-page { background: var(--reader-bg); height: 100vh; overflow: hidden; position: relative; }
+        .reader-container { position: relative; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        #reader-img { max-width: 100%; max-height: 100vh; object-fit: contain; user-select: none; }
 
-        /* 點擊區域分配 */
+        /* 點擊觸發區：左30% 翻前、中40% 菜單、右30% 翻後 */
         .click-area { position: absolute; top: 0; height: 100%; z-index: 10; }
-        .zone-left { left: 0; width: 30%; cursor: w-resize; }
-        .zone-right { right: 0; width: 30%; cursor: e-resize; }
-        .zone-center { left: 30%; width: 40%; cursor: pointer; }
+        .zone-prev { left: 0; width: 30%; cursor: w-resize; }
+        .zone-menu { left: 30%; width: 40%; cursor: pointer; }
+        .zone-next { right: 0; width: 30%; cursor: e-resize; }
 
-        /* 控制 UI */
-        .reader-ui { 
-            opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 100;
-        }
-        .reader-ui.show { opacity: 1; visibility: visible; }
-
+        /* 頁碼顯示：增加 transition 效果 */
         .page-counter { 
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%); 
-            background: rgba(0,0,0,0.7); color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 14px; 
+            position: absolute; top: -50px; left: 50%; transform: translateX(-50%); 
+            background: rgba(0,0,0,0.7); color: #fff; padding: 6px 18px; border-radius: 20px; 
+            font-size: 14px; z-index: 20; transition: top 0.3s ease;
         }
+        .page-counter.show { top: 20px; }
 
+        /* 工具列：增加 transition 效果 */
         .reader-toolbar { 
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            background: rgba(25, 25, 25, 0.9); backdrop-filter: blur(15px); 
+            position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%); 
+            background: rgba(30, 30, 30, 0.9); backdrop-filter: blur(10px); 
             color: #fff; padding: 12px 20px; border-radius: 40px; 
-            display: flex; gap: 15px; align-items: center; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; gap: 15px; align-items: center;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); 
+            z-index: 1000; transition: bottom 0.3s ease; white-space: nowrap;
         }
-        .reader-toolbar div { cursor: pointer; padding: 8px 15px; border-radius: 20px; font-size: 14px; transition: 0.2s; white-space: nowrap; }
+        .reader-toolbar.show { bottom: 30px; }
+        .reader-toolbar div { cursor: pointer; font-size: 14px; padding: 6px 12px; border-radius: 20px; transition: 0.2s; }
         .reader-toolbar div:hover:not(.disabled) { background: var(--primary-color); }
-        .reader-toolbar .disabled { color: #555; cursor: default; }
+        .reader-toolbar div.disabled { color: #555; cursor: not-allowed; }
 
+        /* 手機版適配 */
         @media (max-width: 600px) {
-            .reader-toolbar { width: 90%; justify-content: space-around; gap: 5px; padding: 10px; }
-            .reader-toolbar div { padding: 8px 10px; font-size: 13px; }
+            header { flex-direction: column; padding: 10px; }
             .detail-header { flex-direction: column; align-items: center; text-align: center; }
-            .detail-cover { width: 140px; }
+            .detail-cover { width: 130px; }
+            
+            .reader-toolbar { width: 90%; gap: 5px; justify-content: space-around; padding: 10px; }
+            .reader-toolbar div { font-size: 13px; padding: 5px 8px; }
+            .reader-toolbar.show { bottom: 20px; }
         }
     </style>
 </head>
@@ -106,21 +134,24 @@
     </div>
     <div class="social-links">
         <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#"><i class="fa-brands fa-threads"></i></a>
         <a href="#"><i class="fa-brands fa-discord"></i></a>
     </div>
 </header>
 
 <div id="home-page" class="page active">
-    <div class="manga-grid" id="home-grid"></div>
+    <div class="manga-grid" id="home-grid">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 50px;">載入中...</div>
+    </div>
 </div>
 
 <div id="detail-page" class="page">
     <div class="detail-view">
         <div class="detail-header">
-            <img id="detail-img" class="detail-cover" src="">
+            <img id="detail-img" class="detail-cover" src="" alt="封面">
             <div class="detail-info">
-                <h1 id="detail-title"></h1>
-                <p id="detail-desc"></p>
+                <h1 id="detail-title">標題</h1>
+                <p id="detail-desc">簡介內容...</p>
             </div>
         </div>
         <div class="chapter-container">
@@ -132,21 +163,20 @@
 
 <div id="reader-page" class="page">
     <div class="reader-container">
-        <div class="click-area zone-left" onclick="prevPage()"></div>
-        <div class="click-area zone-center" onclick="toggleUI()"></div>
-        <div class="click-area zone-right" onclick="nextPage()"></div>
-
-        <img id="reader-img" src="">
+        <div class="page-counter" id="page-counter">1 / 1</div>
         
-        <div id="reader-ui-layer" class="reader-ui">
-            <div class="page-counter" id="page-counter">0 / 0</div>
-            <div class="reader-toolbar">
-                <div id="btn-prev-ch" onclick="prevChapter()">上一章</div>
-                <div onclick="showPage('detail-page')"><i class="fa-solid fa-list"></i> 目錄</div>
-                <div onclick="showPage('home-page')"><i class="fa-solid fa-house"></i> 首頁</div>
-                <div id="btn-next-ch" onclick="nextChapter()">下一章</div>
-            </div>
-        </div>
+        <div class="click-area zone-prev" onclick="prevPage()"></div>
+        <div class="click-area zone-menu" onclick="toggleUI()"></div>
+        <div class="click-area zone-next" onclick="nextPage()"></div>
+        
+        <img id="reader-img" src="" alt="漫畫內容">
+    </div>
+    
+    <div class="reader-toolbar" id="reader-toolbar">
+        <div id="btn-prev-ch" onclick="prevChapter()"><i class="fa-solid fa-angles-left"></i> 上一章</div>
+        <div onclick="showPage('detail-page')"><i class="fa-solid fa-list"></i> 目錄</div>
+        <div onclick="showPage('home-page')"><i class="fa-solid fa-house"></i> 首頁</div>
+        <div id="btn-next-ch" onclick="nextChapter()">下一章 <i class="fa-solid fa-angles-right"></i></div>
     </div>
 </div>
 
@@ -155,15 +185,18 @@
     let currentMangaIdx = 0;
     let currentChapterIdx = 0;
     let currentPageIdx = 0;
-    let isUIShowing = false;
+    let currentImages = [];
+    let isUIShown = false; // 控制選單狀態
 
     async function loadData() {
         try {
-            const response = await fetch('data/data.json');
+            // 這裡假設你的 JSON 放在 data/data.json
+            const response = await fetch('data/data.json'); 
             mangaData = await response.json();
             renderHome();
-        } catch (e) {
-            console.error("Data Load Error");
+        } catch (error) {
+            console.error('Data Load Error:', error);
+            document.getElementById('home-grid').innerHTML = "無法讀取資料，請確認 data.json 路徑。";
         }
     }
 
@@ -171,87 +204,89 @@
         const grid = document.getElementById('home-grid');
         grid.innerHTML = mangaData.map((m, i) => `
             <div class="manga-card" onclick="openManga(${i})">
-                <div class="cover-wrapper"><img src="${m.cover}"></div>
+                <div class="cover-wrapper"><img src="${m.cover}" loading="lazy"></div>
                 <div class="manga-title">${m.title}</div>
             </div>
         `).join('');
     }
 
-    function openManga(idx) {
-        currentMangaIdx = idx;
-        const m = mangaData[idx];
+    function openManga(index) {
+        currentMangaIdx = index;
+        const m = mangaData[index];
         document.getElementById('detail-title').innerText = m.title;
         document.getElementById('detail-img').src = m.cover;
         document.getElementById('detail-desc').innerText = m.desc;
-        document.getElementById('detail-chapters').innerHTML = m.chapters.map((ch, ci) => 
-            `<div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>`
-        ).join('');
+        const list = document.getElementById('detail-chapters');
+        list.innerHTML = m.chapters.map((ch, ci) => `<div class="chapter-item" onclick="startReading(${ci})">${ch.name}</div>`).join('');
         showPage('detail-page');
     }
 
-    function startReading(chIdx) {
-        currentChapterIdx = chIdx;
+    function startReading(chIndex) {
+        currentChapterIdx = chIndex;
+        currentImages = mangaData[currentMangaIdx].chapters[chIndex].images;
         currentPageIdx = 0;
-        hideUI(); // 進入時隱藏工具列
+        isUIShown = false; // 進入時隱藏選單
+        updateUIState();
         renderPage();
         showPage('reader-page');
     }
 
     function renderPage() {
-        const m = mangaData[currentMangaIdx];
-        const ch = m.chapters[currentChapterIdx];
-        const imgEl = document.getElementById('reader-img');
+        if (!currentImages.length) return;
+        document.getElementById('reader-img').src = currentImages[currentPageIdx];
+        document.getElementById('page-counter').innerText = `${currentPageIdx + 1} / ${currentImages.length}`;
         
-        imgEl.src = ch.images[currentPageIdx];
-        document.getElementById('page-counter').innerText = `${currentPageIdx + 1} / ${ch.images.length}`;
+        // 檢查章節按鈕狀態
+        document.getElementById('btn-prev-ch').classList.toggle('disabled', currentChapterIdx === 0);
+        document.getElementById('btn-next-ch').classList.toggle('disabled', currentChapterIdx === mangaData[currentMangaIdx].chapters.length - 1);
         
-        // 更新按鈕狀態
-        document.getElementById('btn-prev-ch').className = currentChapterIdx === 0 ? 'disabled' : '';
-        document.getElementById('btn-next-ch').className = currentChapterIdx === m.chapters.length - 1 ? 'disabled' : '';
-
-        // 預載下一張
-        if (currentPageIdx < ch.images.length - 1) {
-            new Image().src = ch.images[currentPageIdx + 1];
+        // 預載
+        if (currentPageIdx < currentImages.length - 1) {
+            new Image().src = currentImages[currentPageIdx + 1];
         }
     }
 
-    // --- 工具列控制 ---
+    // 切換 UI 顯示/隱藏
     function toggleUI() {
-        isUIShowing = !isUIShowing;
-        const ui = document.getElementById('reader-ui-layer');
-        if (isUIShowing) ui.classList.add('show');
-        else ui.classList.remove('show');
+        isUIShown = !isUIShown;
+        updateUIState();
     }
 
-    function hideUI() {
-        isUIShowing = false;
-        document.getElementById('reader-ui-layer').classList.remove('show');
+    function updateUIState() {
+        const toolbar = document.getElementById('reader-toolbar');
+        const counter = document.getElementById('page-counter');
+        if (isUIShown) {
+            toolbar.classList.add('show');
+            counter.classList.add('show');
+        } else {
+            toolbar.classList.remove('show');
+            counter.classList.remove('show');
+        }
     }
 
     function prevPage() {
-        hideUI();
         if (currentPageIdx > 0) {
             currentPageIdx--;
             renderPage();
         } else if (currentChapterIdx > 0) {
             currentChapterIdx--;
-            currentPageIdx = mangaData[currentMangaIdx].chapters[currentChapterIdx].images.length - 1;
+            currentImages = mangaData[currentMangaIdx].chapters[currentChapterIdx].images;
+            currentPageIdx = currentImages.length - 1;
             renderPage();
         }
     }
 
     function nextPage() {
-        hideUI();
-        const ch = mangaData[currentMangaIdx].chapters[currentChapterIdx];
-        if (currentPageIdx < ch.images.length - 1) {
+        if (currentPageIdx < currentImages.length - 1) {
             currentPageIdx++;
             renderPage();
         } else if (currentChapterIdx < mangaData[currentMangaIdx].chapters.length - 1) {
             currentChapterIdx++;
+            currentImages = mangaData[currentMangaIdx].chapters[currentChapterIdx].images;
             currentPageIdx = 0;
             renderPage();
         } else {
-            alert("已是最後一頁");
+            alert('全書完畢！');
             showPage('detail-page');
         }
     }
@@ -268,7 +303,7 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById('main-header').style.display = (id === 'reader-page') ? 'none' : 'flex';
-        window.scrollTo(0, 0);
+        window.scrollTo({top: 0});
     }
 
     loadData();
