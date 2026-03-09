@@ -1,79 +1,225 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-  <head>
+<html lang="zh-TW">
+<head>
     <meta charset="UTF-8">
-    <title>RF2_CG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方方Ray | 你的專屬漫畫館</title>
     <style>
-      body {
-        margin: 0;
-        background-color: #000; /* 黑底 */
-        font-family: Arial, sans-serif;
-        color: #fff;
-      }
-      
-      .header {
-        display: flex;
-    align-items: center;
-    padding: 20px;
-  }
+        /* 全域變數設定 */
+        :root {
+            --primary-color: #ff4757;
+            --bg-color: #0f0f0f;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --text-dim: #a0a0a0;
+        }
 
-  .avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: red; /* 你的頭像位置 */
-    margin-right: 15px;
-  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
 
-  .username {
-    font-size: 24px;
-    color: pink; /* 名字顏色 */
-  }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
 
-  .icons {
-    display: flex;
-    gap: 15px;
-    margin: 10px 0 20px 75px; /* 和頭像對齊 */
-  }
+        /* 導航欄 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-  .icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: white; /* 圓形白色圖示 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
-    cursor: pointer;
-  }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-  .comic {
-    width: 200px;
-    height: 300px;
-    margin: 0 auto 20px auto;
-    background-color: blue; /* 漫畫封面位置 */
-    cursor: pointer;
-  }
-</style>
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 橫幅廣告 (Hero Section) */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(to bottom, transparent, var(--bg-color)),
+                        url('https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&q=80&w=1200') center/cover;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 5% 3rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* 漫畫網格 */
+        .container {
+            padding: 2rem 5%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .manga-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 25px;
+        }
+
+        /* 漫畫卡片設計 */
+        .manga-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .manga-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .manga-card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+
+        .manga-info {
+            padding: 12px;
+        }
+
+        .manga-title {
+            font-size: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .manga-chapter {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2rem; }
+            .nav-links { display: none; }
+            .manga-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="avatar"></div>
-  <div class="username">方方Ray</div>
-</div>
+    <nav>
+        <div class="logo">方方Ray</div>
+        <ul class="nav-links">
+            <li><a href="#">首頁</a></li>
+            <li><a href="#">熱門</a></li>
+            <li><a href="#">分類</a></li>
+            <li><a href="#">書架</a></li>
+        </ul>
+    </nav>
 
-<div class="icons">
-  <a href="#" class="icon"><i class="fa-brands fa-instagram"></i></a>
-  <a href="#" class="icon"><i class="fa-brands fa-threads"></i></a>
-  <a href="#" class="icon"><i class="fa-brands fa-x-twitter"></i></a>
-  <a href="#" class="icon"><i class="fa-brands fa-discord"></i></a>
-</div>
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">今日推薦</span>
+            <h1>本週最熱門連載</h1>
+            <p>探索超過 10,000 部精彩漫畫作品</p>
+        </div>
+    </header>
 
-<div class="comic"></div>
+    <main class="container">
+        <h2 class="section-title">熱門更新</h2>
+        
+        <div class="manga-grid">
+            <div class="manga-card">
+                <span class="badge">New</span>
+                <img src="https://picsum.photos/seed/manga1/400/600" alt="Manga Cover">
+                <div class="manga-info">
+                    <div class="manga-title">A</div>
+                    <div class="manga-chapter">第 124 話</div>
+                </div>
+            </div>
+
+            <div class="manga-card">
+                <img src="https://picsum.photos/seed/manga2/400/600" alt="Manga Cover">
+                <div class="manga-info">
+                    <div class="manga-title">B</div>
+                    <div class="manga-chapter">第 42 話</div>
+                </div>
+            </div>
+
+            <div class="manga-card">
+                <img src="https://picsum.photos/seed/manga3/400/600" alt="Manga Cover">
+                <div class="manga-info">
+                    <div class="manga-title">C</div>
+                    <div class="manga-chapter">第 88 話</div>
+                </div>
+            </div>
+
+            <div class="manga-card">
+                <span class="badge">Hot</span>
+                <img src="https://picsum.photos/seed/manga4/400/600" alt="Manga Cover">
+                <div class="manga-info">
+                    <div class="manga-title">D</div>
+                    <div class="manga-chapter">第 256 話</div>
+                </div>
+            </div>
+
+            <div class="manga-card"><img src="https://picsum.photos/seed/manga5/400/600"><div class="manga-info"><div class="manga-title">E</div><div class="manga-chapter">第 15 話</div></div></div>
+            <div class="manga-card"><img src="https://picsum.photos/seed/manga6/400/600"><div class="manga-info"><div class="manga-title">F</div><div class="manga-chapter">第 03 話</div></div></div>
+        </div>
+    </main>
 
 </body>
 </html>
