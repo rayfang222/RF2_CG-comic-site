@@ -119,12 +119,10 @@
             background: #1a1a1a;
             border-bottom: 1px solid #333;
             position: absolute;
-            top: -60px;
+            top: 0;
             left: 0; right: 0;
             z-index: 200;
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #reader-topbar.show { top: 0; }
         #reader-chapter-title { font-size: 15px; font-weight: 700; color: #f0e6c8; letter-spacing: 1px; font-family: 'Noto Sans TC', sans-serif; }
         #reader-page-info { font-size: 13px; color: #888; font-family: 'Noto Sans TC', sans-serif; }
 
@@ -233,7 +231,7 @@
         /* 底部工具列 */
         #reader-bottombar {
             position: absolute;
-            bottom: -120px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(25,25,25,0.95);
@@ -247,12 +245,10 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.1);
             z-index: 200;
-            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 560px;
             max-width: 94vw;
             font-family: 'Noto Sans TC', sans-serif;
         }
-        #reader-bottombar.show { bottom: 25px; }
 
         .reader-toolbar-btn {
             cursor: pointer;
@@ -462,8 +458,6 @@
         document.getElementById('main-header').style.display = isReader ? 'none' : 'flex';
         if (!isReader) {
             readerUIShown = false;
-            document.getElementById('reader-topbar').classList.remove('show');
-            document.getElementById('reader-bottombar').classList.remove('show');
         }
         window.scrollTo({ top: 0 });
     }
@@ -663,11 +657,7 @@
     }
 
     /* ===================== UI 顯示/隱藏 ===================== */
-    function toggleUI() {
-        readerUIShown = !readerUIShown;
-        document.getElementById('reader-topbar').classList.toggle('show', readerUIShown);
-        document.getElementById('reader-bottombar').classList.toggle('show', readerUIShown);
-    }
+    function toggleUI() { /* 固定顯示，不做任何事 */ }
 
     /* ===================== 點擊區域事件 ===================== */
     document.getElementById('reader-zone-left').onclick = () => {
@@ -679,13 +669,7 @@
         else readerNext();
     };
 
-    // 中間區域點擊顯示/隱藏 UI
-    document.getElementById('reader-viewer').addEventListener('click', (e) => {
-        const viewer = document.getElementById('reader-viewer');
-        const rect   = viewer.getBoundingClientRect();
-        const xPct   = (e.clientX - rect.left) / rect.width;
-        if (xPct >= 0.35 && xPct <= 0.65) toggleUI();
-    });
+    // 中間區域點擊不做任何事
 
     /* ===================== 鍵盤控制 ===================== */
     document.addEventListener('keydown', e => {
@@ -700,7 +684,6 @@
             if (e.key === 'ArrowLeft')  readerPrev();
             if (e.key === 'ArrowRight') readerNext();
         }
-        if (e.key === 'Escape' && readerUIShown) toggleUI();
     });
 
     /* ===================== 觸控滑動 ===================== */
@@ -735,11 +718,6 @@
         }
     }
 
-    loadData();
-</script>
-
-</body>
-</html>
     loadData();
 </script>
 
