@@ -300,6 +300,50 @@
             flex-shrink: 0;
         }
 
+        /* ===================== 結尾彈窗 ===================== */
+        #end-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        #end-modal-overlay.show { display: flex; }
+        #end-modal {
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 36px 32px;
+            text-align: center;
+            width: 320px;
+            max-width: 88vw;
+            font-family: 'Noto Sans TC', sans-serif;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        #end-modal h2 { color: #f0e6c8; font-size: 18px; margin: 0 0 8px 0; }
+        #end-modal p  { color: #888; font-size: 13px; margin: 0 0 28px 0; line-height: 1.6; }
+        .end-modal-btns { display: flex; flex-direction: column; gap: 10px; }
+        .end-btn {
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans TC', sans-serif;
+            transition: filter 0.2s;
+        }
+        .end-btn:hover { filter: brightness(1.1); }
+        .end-btn.green  { background: #2ecc71; color: #fff; }
+        .end-btn.orange { background: var(--primary-color); color: #fff; }
+        .end-btn.gray   { background: #2a2a2a; color: #aaa; border: 1px solid #444; }
+
         @media (max-width: 768px) {
             .detail-header { flex-direction: column; text-align: center; align-items: center; padding: 30px 20px; }
             .detail-cover { width: 160px; }
@@ -352,6 +396,15 @@
             <h3>選擇章節</h3>
             <div class="chapter-list" id="detail-chapters"></div>
         </div>
+    </div>
+</div>
+
+<!-- 結尾彈窗 -->
+<div id="end-modal-overlay">
+    <div id="end-modal">
+        <h2 id="end-modal-title">本話結束</h2>
+        <p id="end-modal-desc"></p>
+        <div class="end-modal-btns" id="end-modal-btns"></div>
     </div>
 </div>
 
@@ -629,13 +682,56 @@
 
     function nextChapterOrEnd() {
         const manga = mangaData[currentMangaIdx];
-        if (currentChapterIdx < manga.chapters.length - 1) {
-            startReading(currentChapterIdx + 1);
+        const hasNext = currentChapterIdx < manga.chapters.length - 1;
+        const title   = document.getElementById('end-modal-title');
+        const desc    = document.getElementById('end-modal-desc');
+        const btns    = document.getElementById('end-modal-btns');
+
+        title.textContent = '本話結束';
+        btns.innerHTML = '';
+
+        if (hasNext) {
+            desc.textContent = '';
+            // 下一話（綠色）
+            const btnNext = document.createElement('button');
+            btnNext.className = 'end-btn green';
+            btnNext.textContent = '▶ 下一話';
+            btnNext.onclick = () => { closeEndModal(); startReading(currentChapterIdx + 1); };
+            // 停留本話（灰色）
+            const btnStay = document.createElement('button');
+            btnStay.className = 'end-btn gray';
+            btnStay.textContent = '停留本話';
+            btnStay.onclick = () => closeEndModal();
+            // 回首頁（橘色）
+            const btnHome = document.createElement('button');
+            btnHome.className = 'end-btn orange';
+            btnHome.textContent = '回首頁';
+            btnHome.onclick = () => { closeEndModal(); showPage('home-page'); };
+            btns.appendChild(btnNext);
+            btns.appendChild(btnStay);
+            btns.appendChild(btnHome);
         } else {
-            toggleUI();
-            alert('本漫載入完畢！');
-            showPage('detail-page');
+            title.textContent = '本話為最後一話';
+            desc.textContent = '感謝收看！';
+            // 停留本話（灰色）
+            const btnStay = document.createElement('button');
+            btnStay.className = 'end-btn gray';
+            btnStay.textContent = '停留本話';
+            btnStay.onclick = () => closeEndModal();
+            // 回首頁（橘色）
+            const btnHome = document.createElement('button');
+            btnHome.className = 'end-btn orange';
+            btnHome.textContent = '回首頁';
+            btnHome.onclick = () => { closeEndModal(); showPage('home-page'); };
+            btns.appendChild(btnStay);
+            btns.appendChild(btnHome);
         }
+
+        document.getElementById('end-modal-overlay').classList.add('show');
+    }
+
+    function closeEndModal() {
+        document.getElementById('end-modal-overlay').classList.remove('show');
     }
 
     function prevChapter() {
@@ -720,6 +816,9 @@
 
     loadData();
 </script>
+
+</body>
+</html>ipt>
 
 </body>
 </html>
